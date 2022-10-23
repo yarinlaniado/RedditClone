@@ -22,14 +22,23 @@ type RecommendationsProps = {};
 const Recommendations: React.FC<RecommendationsProps> = () => {
   const [communities, setCommunities] = useState<Community[]>([]);
   const [loading, setLoading] = useState(false);
+  const [limitCount, setLimitCount] = useState(5);
   const { communityStateValue, onJoinOrLeaveCommunity } = useCommunityData();
+  const communityLoader = () => {
+    if (communities.length < limitCount) {
+      setLimitCount(5);
+      return;
+    } else setLimitCount(limitCount + 5);
+    getCommunityRecommendation();
+  };
+
   const getCommunityRecommendation = async () => {
     setLoading(true);
     try {
       const communityQuery = query(
         collection(firestore, "communities"),
         orderBy("numberOfMembers", "desc"),
-        limit(5)
+        limit(limitCount)
       );
       const communityDocs = await getDocs(communityQuery);
       const communities = communityDocs.docs.map((doc) => ({
@@ -45,6 +54,9 @@ const Recommendations: React.FC<RecommendationsProps> = () => {
   useEffect(() => {
     getCommunityRecommendation();
   }, []);
+  useEffect(() => {
+    getCommunityRecommendation();
+  }, [limitCount]);
 
   return (
     <Flex
@@ -149,8 +161,12 @@ const Recommendations: React.FC<RecommendationsProps> = () => {
               );
             })}
             <Box p="10px 20px">
-              <Button height="30px" width="100%">
-                View all
+              <Button onClick={communityLoader} height="30px" width="100%">
+                {limitCount > communities.length ? (
+                  <Text>Back to top 5</Text>
+                ) : (
+                  <Text>Load top {limitCount + 5}</Text>
+                )}
               </Button>
             </Box>
           </>
