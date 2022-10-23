@@ -16,6 +16,7 @@
     "@fontsource/open-sans": "^4.5.11",
     "@fontsource/raleway": "^4.5.10",
     "firebase": "^9.9.4",
+    "firebase-functions": "^4.0.1",
     "framer-motion": "^6.5.1",
     "moment": "^2.29.4",
     "next": "12.2.5",
