@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Flex, Icon, Stack, Text } from "@chakra-ui/react";
 import { FaReddit } from "react-icons/fa";
+import useDirectory from "../../hooks/useDirectory";
+import CreateCommunityModal from "../Modal/CreateCommunity/CreateCommunityModal";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../../firebase/clientApp";
 
 const PersonalHome: React.FC = () => {
+  const { toggleMenuOpen } = useDirectory();
+  const [open, setOpen] = useState(false);
+  const [user] = useAuthState(auth);
   return (
     <Flex
       direction="column"
@@ -33,10 +40,18 @@ const PersonalHome: React.FC = () => {
           <Text fontSize="9pt">
             Your personal Reddit frontpage, built for you.
           </Text>
-          <Button height="30px">Create Post</Button>
-          <Button variant="outline" height="30px">
+          <Button height="30px" onClick={toggleMenuOpen}>
+            Create Post
+          </Button>
+          <Button variant="outline" height="30px" onClick={() => setOpen(true)}>
             Create Community
           </Button>
+          {user && (
+            <CreateCommunityModal
+              open={open}
+              handleClose={() => setOpen(false)}
+            />
+          )}
         </Stack>
       </Flex>
     </Flex>
