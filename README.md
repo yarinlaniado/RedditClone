@@ -2,7 +2,7 @@
 <!-- PROJECT LOGO -->
 
 
-<h3 align="center">Reddit Clone</h3>
+<h1 align="center">Reddit Clone</h3>
 
   <p align="center">
     Clone of reddit using Next-Js TS Firebase and Chakra-Ui
